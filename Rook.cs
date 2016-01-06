@@ -35,7 +35,7 @@ namespace Chess
 
             // up
             while (--p.Y >= 0)
-                if (board.getPieceAt(p).getImage() == null)
+                if (board.getPieceAt(p)  == null)
                     board.setValidMoveTrue(p);
                 else
                     break;
@@ -43,7 +43,7 @@ namespace Chess
             // right
             p = board.getBasePiecePoint(board.getSelectedPiece());
             while (++p.X < 8)
-                if (board.getPieceAt(p).getImage() == null)
+                if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
                 else
                     break;
@@ -51,7 +51,7 @@ namespace Chess
             // down
             p = board.getBasePiecePoint(board.getSelectedPiece());
             while (++p.Y < 8)
-                if (board.getPieceAt(p).getImage() == null)
+                if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
                 else
                     break;
@@ -59,7 +59,7 @@ namespace Chess
             // left
             p = board.getBasePiecePoint(board.getSelectedPiece());
             while (--p.X >= 0)
-                if (board.getPieceAt(p).getImage() == null)
+                if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
                 else
                     break;
