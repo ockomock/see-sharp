@@ -42,5 +42,23 @@ namespace Chess
 
             return false;
         }
+
+        public override void setValidMoves(ref Board board)
+        {
+            Point p = board.getBasePiecePoint(board.getSelectedPiece());
+
+            // Loop through entire board and find valid moves
+            for(int x = 0; x < 8; x++)
+            {
+                for(int y = 0; y < 8; y++)
+                {
+                    Point newPoint = new Point(x, y);
+                    if (validMove(p, newPoint, ref board))
+                    {
+                        board.setValidMoveTrue(newPoint);
+                    }
+                }
+            }
+        }
     }
 }
