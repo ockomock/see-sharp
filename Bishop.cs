@@ -31,14 +31,20 @@ namespace Chess
 
         public override void setValidMoves(ref Board board)
         {
-            Point p = board.getBasePiecePoint(board.getSelectedPiece());
+            BasePiece selected = board.getSelectedPiece();
+            Point p = board.getBasePiecePoint(selected);
 
             //up left
             while (--p.X >= 0 && --p.Y >= 0)
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
                 else
+                {
+                    if (board.getPieceAt(p).getColor() != selected.getColor())
+                        board.setValidMoveTrue(p);
+
                     break;
+                }
 
             //up right
             p = board.getBasePiecePoint(board.getSelectedPiece());
@@ -46,7 +52,12 @@ namespace Chess
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
                 else
+                {
+                    if (board.getPieceAt(p).getColor() != selected.getColor())
+                        board.setValidMoveTrue(p);
+
                     break;
+                }
 
             //down left
             p = board.getBasePiecePoint(board.getSelectedPiece());
@@ -54,7 +65,12 @@ namespace Chess
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
                 else
+                {
+                    if (board.getPieceAt(p).getColor() != selected.getColor())
+                        board.setValidMoveTrue(p);
+
                     break;
+                }
 
             //down right
             p = board.getBasePiecePoint(board.getSelectedPiece());
@@ -62,7 +78,12 @@ namespace Chess
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
                 else
+                {
+                    if (board.getPieceAt(p).getColor() != selected.getColor())
+                        board.setValidMoveTrue(p);
+
                     break;
+                }
         }
     }
 }

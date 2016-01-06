@@ -18,9 +18,116 @@ namespace Chess
                 setImage("imgs/black_queen.bmp");
         }
 
-        public override bool validMove(Point from, Point to, ref Board board)
+        public override void setValidMoves(ref Board board)
         {
-            return true;
+            BasePiece selected = board.getSelectedPiece();
+            Point p = board.getBasePiecePoint(selected);
+
+            //up left
+            while (--p.X >= 0 && --p.Y >= 0)
+                if (board.getPieceAt(p) == null)
+                    board.setValidMoveTrue(p);
+                else
+                {
+                    if (board.getPieceAt(p).getColor() != selected.getColor())
+                        board.setValidMoveTrue(p);
+
+                    break;
+                }
+
+            //up right
+            p = board.getBasePiecePoint(board.getSelectedPiece());
+            while (--p.X >= 0 && ++p.Y < 8)
+                if (board.getPieceAt(p) == null)
+                    board.setValidMoveTrue(p);
+                else
+                {
+                    if (board.getPieceAt(p).getColor() != selected.getColor())
+                        board.setValidMoveTrue(p);
+
+                    break;
+                }
+
+            //down left
+            p = board.getBasePiecePoint(board.getSelectedPiece());
+            while (++p.X < 8 && --p.Y >= 0)
+                if (board.getPieceAt(p) == null)
+                    board.setValidMoveTrue(p);
+                else
+                {
+                    if (board.getPieceAt(p).getColor() != selected.getColor())
+                        board.setValidMoveTrue(p);
+
+                    break;
+                }
+
+            //down right
+            p = board.getBasePiecePoint(board.getSelectedPiece());
+            while (++p.X < 8 && ++p.Y < 8)
+                if (board.getPieceAt(p) == null)
+                    board.setValidMoveTrue(p);
+                else
+                {
+                    if (board.getPieceAt(p).getColor() != selected.getColor())
+                        board.setValidMoveTrue(p);
+
+                    break;
+                }
+
+            p = board.getBasePiecePoint(selected);
+
+            // up
+            while (--p.Y >= 0)
+                if (board.getPieceAt(p) == null)
+                    board.setValidMoveTrue(p);
+                else
+                {
+                    if (board.getPieceAt(p).getColor() != selected.getColor())
+                        board.setValidMoveTrue(p);
+
+                    break;
+                }
+
+
+            // right
+            p = board.getBasePiecePoint(board.getSelectedPiece());
+            while (++p.X < 8)
+                if (board.getPieceAt(p) == null)
+                    board.setValidMoveTrue(p);
+                else
+                {
+                    if (board.getPieceAt(p).getColor() != selected.getColor())
+                        board.setValidMoveTrue(p);
+
+                    break;
+                }
+
+            // down
+            p = board.getBasePiecePoint(board.getSelectedPiece());
+            while (++p.Y < 8)
+                if (board.getPieceAt(p) == null)
+                    board.setValidMoveTrue(p);
+                else
+                {
+                    if (board.getPieceAt(p).getColor() != selected.getColor())
+                        board.setValidMoveTrue(p);
+
+                    break;
+                }
+
+            // left
+            p = board.getBasePiecePoint(board.getSelectedPiece());
+            while (--p.X >= 0)
+                if (board.getPieceAt(p) == null)
+                    board.setValidMoveTrue(p);
+                else
+                {
+                    if (board.getPieceAt(p).getColor() != selected.getColor())
+                        board.setValidMoveTrue(p);
+
+                    break;
+                }
+
         }
     }
 }

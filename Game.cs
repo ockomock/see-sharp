@@ -42,7 +42,7 @@ namespace Chess
                 }
 
                 BasePiece sb = b.getSelectedPiece();
-                if (sb.validMove(lastPoint, grid, ref b))
+                if (b.getValidMove(grid))   //sb.validMove(lastPoint, grid, ref b))
                      b.updatePiece(lastPoint, grid, ref sb);
 
                 b.setSelectedPiece(null);
