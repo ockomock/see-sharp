@@ -19,7 +19,7 @@ namespace Chess
 
         public void handleClick(Point grid, ref Board b, ref Graphics g)
         {
-            BasePiece bp = new BasePiece();
+            BasePiece bp = null;// new BasePiece();
 
             /*
              * Check out of boundaries
@@ -56,7 +56,7 @@ namespace Chess
              */
             bp = b.getPieceAt(grid);
             lastPoint = grid;
-            if (bp.getImage() != null)
+            if (bp != null)
             {
                 b.setSelectedPiece(b.getPieceAt(grid));
                 Console.WriteLine("PIECE SELECTED"); // debug, remove later

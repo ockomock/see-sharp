@@ -10,7 +10,7 @@ namespace Chess
 {
     public class Bishop : BasePiece
     {
-        public Bishop(Color color)
+        public Bishop(Color color) : base(color)
         {
             if (color == Color.WHITE)
                 setImage("imgs/white_bishop.bmp");

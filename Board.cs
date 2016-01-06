@@ -12,6 +12,8 @@ namespace Chess
 
     public class Board
     {
+       // private List<BasePiece> pieces;
+
         private BasePiece [,]  pieces;
         private BasePiece selectedPiece;
         private Image black, white, selectedpiece;
@@ -23,7 +25,7 @@ namespace Chess
         {
             // Init the board 
 
-            selectedPiece = new BasePiece();
+            selectedPiece = null;// new BasePiece();
             pieces = new BasePiece[8, 8];
             validMoves = new bool[8, 8];
             black = Bitmap.FromFile("imgs/black.bmp");
@@ -68,7 +70,7 @@ namespace Chess
             {
                 for (int y = 2; y < 6; y++)
                 {
-                    pieces[x, y] = new BasePiece(); 
+                    pieces[x, y] = null;// new BasePiece(Color.WHITE); 
                 }
             }
         }
@@ -92,7 +94,7 @@ namespace Chess
                     }
 
                     // Draw the piece
-                    if(pieces[x, y].getImage() != null)
+                    if(pieces[x, y] != null)
                         graphics.DrawImage(pieces[x, y].getImage(), x * gridSize, y * gridSize, gridSize, gridSize);
 
                     // Draw selected piece
@@ -169,7 +171,8 @@ namespace Chess
 
         public void updatePiece(Point lp, Point np, ref BasePiece bp)
         {
-            pieces[lp.X, lp.Y] = new BasePiece();
+            // TODO!! Create some special event if a piece is captured!
+            pieces[lp.X, lp.Y] = null;// ew BasePiece(Color.WHITE);
             pieces[np.X, np.Y] = bp;
             
         }

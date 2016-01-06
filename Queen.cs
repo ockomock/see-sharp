@@ -10,7 +10,7 @@ namespace Chess
 {
     public class Queen : BasePiece
     {
-        public Queen(Color color)
+        public Queen(Color color) : base(color)
         {
             if (color == Color.WHITE)
                 setImage("imgs/white_queen.bmp");

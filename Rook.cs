@@ -10,7 +10,7 @@ namespace Chess
 {
     public class Rook : BasePiece
     {
-        public Rook(Color color) 
+        public Rook(Color color) : base(color)
         {
             if (color == Color.WHITE)
                 setImage("imgs/white_rook.bmp");
