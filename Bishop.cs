@@ -18,7 +18,7 @@ namespace Chess
                 setImage("imgs/black_bishop.bmp");
         }
 
-        public override bool validMove(Point from, Point to, ref Board board)
+        public override bool validMove(Point from, Point to, Board board)
         {
             if (from == to)
                 return false;
@@ -29,9 +29,9 @@ namespace Chess
             return true;
         }
 
-        public override void setValidMoves(ref Board board)
+        public override void setValidMoves(Board board)
         {
-            BasePiece selected = board.getSelectedPiece();
+            BasePiece selected = this;// board.getSelectedPiece();
             Point p = board.getBasePiecePoint(selected);
 
             //up left
@@ -47,7 +47,7 @@ namespace Chess
                 }
 
             //up right
-            p = board.getBasePiecePoint(board.getSelectedPiece());
+            p = board.getBasePiecePoint(selected);
             while (--p.X >= 0 && ++p.Y < 8)
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
@@ -60,7 +60,7 @@ namespace Chess
                 }
 
             //down left
-            p = board.getBasePiecePoint(board.getSelectedPiece());
+            p = board.getBasePiecePoint(selected);
             while (++p.X < 8 && --p.Y >= 0)
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
@@ -73,7 +73,7 @@ namespace Chess
                 }
 
             //down right
-            p = board.getBasePiecePoint(board.getSelectedPiece());
+            p = board.getBasePiecePoint(selected);
             while (++p.X < 8 && ++p.Y < 8)
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);

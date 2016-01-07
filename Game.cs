@@ -42,8 +42,26 @@ namespace Chess
                 }
 
                 BasePiece sb = b.getSelectedPiece();
-                if (b.getValidMove(grid))   //sb.validMove(lastPoint, grid, ref b))
-                     b.updatePiece(lastPoint, grid, ref sb);
+
+                // Valid move! Move the piece to new position
+                if (b.getValidMove(sb, grid))
+                {
+                    b.updatePiece(lastPoint, grid, ref sb);
+
+                    // Test if the new position results in check
+                    // Every piece needs to be looped and tested against the kings position
+                    
+                    if(b.isChecking(sb.getColor()))
+                    {
+                        Console.WriteLine("THAT MEANS CHECK!");
+
+                        // Is it checkmate?
+                        if (b.checkMate((sb.getColor() == Color.BLACK ? Color.WHITE : Color.BLACK)))
+                        {
+                            Console.WriteLine("Check mate! :)");
+                        }
+                    }
+                }
 
                 b.setSelectedPiece(null);
                 b.resetValidMoves();
@@ -61,7 +79,9 @@ namespace Chess
                 b.setSelectedPiece(b.getPieceAt(grid));
                 Console.WriteLine("PIECE SELECTED"); // debug, remove later
 
-                bp.setValidMoves(ref b);
+                b.setValidMoves(bp);
+
+                //bp.setValidMoves(b);
             }
             else
             {
@@ -70,7 +90,6 @@ namespace Chess
             
 
             Console.WriteLine("THIS FUCKING SHIT x: " + grid.X + "y: " + grid.Y); // debug, remove later
-        }
-
+        }      
     }
 }

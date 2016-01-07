@@ -18,9 +18,9 @@ namespace Chess
                 setImage("imgs/black_queen.bmp");
         }
 
-        public override void setValidMoves(ref Board board)
+        public override void setValidMoves(Board board)
         {
-            BasePiece selected = board.getSelectedPiece();
+            BasePiece selected = this;
             Point p = board.getBasePiecePoint(selected);
 
             //up left
@@ -36,7 +36,7 @@ namespace Chess
                 }
 
             //up right
-            p = board.getBasePiecePoint(board.getSelectedPiece());
+            p = board.getBasePiecePoint(selected);
             while (--p.X >= 0 && ++p.Y < 8)
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
@@ -49,7 +49,7 @@ namespace Chess
                 }
 
             //down left
-            p = board.getBasePiecePoint(board.getSelectedPiece());
+            p = board.getBasePiecePoint(selected);
             while (++p.X < 8 && --p.Y >= 0)
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
@@ -62,7 +62,7 @@ namespace Chess
                 }
 
             //down right
-            p = board.getBasePiecePoint(board.getSelectedPiece());
+            p = board.getBasePiecePoint(selected);
             while (++p.X < 8 && ++p.Y < 8)
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
@@ -90,7 +90,7 @@ namespace Chess
 
 
             // right
-            p = board.getBasePiecePoint(board.getSelectedPiece());
+            p = board.getBasePiecePoint(selected);
             while (++p.X < 8)
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
@@ -103,7 +103,7 @@ namespace Chess
                 }
 
             // down
-            p = board.getBasePiecePoint(board.getSelectedPiece());
+            p = board.getBasePiecePoint(selected);
             while (++p.Y < 8)
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);
@@ -116,7 +116,7 @@ namespace Chess
                 }
 
             // left
-            p = board.getBasePiecePoint(board.getSelectedPiece());
+            p = board.getBasePiecePoint(selected);
             while (--p.X >= 0)
                 if (board.getPieceAt(p) == null)
                     board.setValidMoveTrue(p);

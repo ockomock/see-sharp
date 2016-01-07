@@ -18,7 +18,7 @@ namespace Chess
                 setImage("imgs/black_pawn.bmp");
         }
 
-        public override bool validMove(Point from, Point to, ref Board board)
+        public override bool validMove(Point from, Point to, Board board)
         {
             Point delta = new Point(to.X - from.X, to.Y - from.Y);
 
@@ -43,9 +43,9 @@ namespace Chess
             return false;
         }
 
-        public override void setValidMoves(ref Board board)
+        public override void setValidMoves(Board board)
         {
-            Point p = board.getBasePiecePoint(board.getSelectedPiece());
+            Point p = board.getBasePiecePoint(this);// board.getSelectedPiece());
 
             // Loop through entire board and find valid moves
             for(int x = 0; x < 8; x++)
@@ -53,7 +53,7 @@ namespace Chess
                 for(int y = 0; y < 8; y++)
                 {
                     Point newPoint = new Point(x, y);
-                    if (validMove(p, newPoint, ref board))
+                    if (validMove(p, newPoint, board))
                     {
                         board.setValidMoveTrue(newPoint);
                     }

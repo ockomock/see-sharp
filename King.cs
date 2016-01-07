@@ -18,7 +18,7 @@ namespace Chess
                 setImage("imgs/black_king.bmp");
         }
 
-        public override bool validMove(Point from, Point to, ref Board board)
+        public override bool validMove(Point from, Point to, Board board)
         {
             return true;
         }

@@ -19,9 +19,9 @@ namespace Chess
             color = c;
         }
 
-        public virtual bool validMove(Point from, Point to, ref Board board) { return false; }
+        public virtual bool validMove(Point from, Point to, Board board) { return false; }
 
-        public virtual void setValidMoves(ref Board board) { }
+        public virtual void setValidMoves(Board board) { }
 
         public Image getImage()
         {

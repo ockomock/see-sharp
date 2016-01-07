@@ -75,6 +75,12 @@ namespace Chess
             }
         }
 
+        internal void setValidMoves(BasePiece bp)
+        {
+            // Let the piece test allowed moves
+            bp.setValidMoves(this);
+        }
+
         public void Draw(Graphics graphics)
         {
             for(int x = 0; x < 8; x++)
@@ -124,9 +130,75 @@ namespace Chess
             validMoves[p.X, p.Y] = true;
         }
 
-        public bool getValidMove(Point p)
+        public bool getValidMove(BasePiece sb, Point p)
         {
-            return validMoves[p.X, p.Y];
+            bool valid = validMoves[p.X, p.Y];
+
+            // Test if the move results in check
+            if (valid)
+            {
+                // [[Temporarily]] move the piece!!
+                Point oldPoint = getBasePiecePoint(sb);
+                updatePiece(oldPoint, p, ref sb);
+
+                // Test opponents pieces
+                if (isChecking((sb.getColor() == Color.BLACK ? Color.WHITE : Color.BLACK)))
+                {
+                    // Move back the piece!
+                    updatePiece(p, oldPoint, ref sb);
+
+                    Console.WriteLine("Check! Invalid move!");
+
+                    return false;
+                }
+
+                // Move back the piece!
+                updatePiece(p, oldPoint, ref sb);
+            }
+
+            return valid;
+        }
+
+        private Point getKingPos(Color color)
+        {
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (pieces[i, j] == null)
+                        continue;
+
+                    if (pieces[i, j].GetType() == typeof(King) && pieces[i, j].getColor() == color)
+                        return new Point(i, j);
+                }
+            }
+
+            return new Point(-1, -1);
+        }
+
+        public bool isChecking(Color color)
+        {
+            Color c = (color == Color.BLACK ? Color.WHITE : Color.BLACK);
+            Point kingPos = getKingPos(c);
+
+            // Test opponents pieces
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    BasePiece piece = pieces[i, j];
+                    if (piece != null && piece.getColor() != c)
+                    {
+                        resetValidMoves();
+                        piece.setValidMoves(this);
+
+                        // Check!
+                        if (validMoves[kingPos.X, kingPos.Y])
+                            return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public BasePiece getPieceAt(int x, int y)
@@ -188,5 +260,7 @@ namespace Chess
 
             return grid;
         }
+
+
     }
 }
