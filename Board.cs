@@ -130,6 +130,11 @@ namespace Chess
             validMoves[p.X, p.Y] = true;
         }
 
+        public bool isValidMove(Point p)
+        {
+            return validMoves[p.X, p.Y];
+        }
+
         public bool getValidMove(BasePiece sb, Point p)
         {
             bool valid = validMoves[p.X, p.Y];
@@ -192,8 +197,8 @@ namespace Chess
                         piece.setValidMoves(this);
 
                         // Check!
-                        if (validMoves[kingPos.X, kingPos.Y])
-                            return true;
+                        //if (validMoves[kingPos.X, kingPos.Y])
+                          //  return true;
                     }
                 }
             }
