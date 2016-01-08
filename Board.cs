@@ -231,6 +231,11 @@ namespace Chess
             validMoves[p.X, p.Y] = true;
         }
 
+        public bool isValidMove(Point p)
+        {
+            return validMoves[p.X, p.Y];
+        }
+
         public bool getValidMove(BasePiece sb, Point p)
         {
             // OBS!!!! Pieces will dissapear if there is a capture and the move acctually is invalid!!!
@@ -307,6 +312,7 @@ namespace Chess
                     {                     
                         resetValidMoves();
                         piece.setValidMoves(this);
+
 
                         // Pinning!
                         if (validMoves[pos.X, pos.Y])
