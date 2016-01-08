@@ -117,12 +117,14 @@ namespace Chess
             {
                 b.setSelectedPiece(null);
                 b.resetValidMoves();
+                game.changeTurn(b);
                 return 2;
             }
 
             b.updatePiece(lp, np, ref bp);
             b.setSelectedPiece(null);
             b.resetValidMoves();
+            game.changeTurn(b);
             return 0;
         }
 

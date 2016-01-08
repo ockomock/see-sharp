@@ -11,11 +11,14 @@ namespace Chess
     class Game
     {
         private Player p1, p2, activePlayer;
+        int mode;
         int turnCounter = 1;
 
         public Game(int gameMode, ref Board b)
         {
             System.Console.WriteLine(gameMode);
+
+            mode = gameMode;
 
             switch (gameMode)
             {
@@ -39,14 +42,23 @@ namespace Chess
 
         public void changeTurn(Board board)
         {
-            turnCounter *= -1;
-
-            if (turnCounter == 1)
-                activePlayer = p1;
+            // Is it checkmate?
+            if (board.checkMate(activePlayer.getColor() == Color.BLACK ? Color.WHITE : Color.BLACK))
+            {
+                Console.WriteLine("Check mate! :)");
+                activePlayer = null;
+            }
             else
-                activePlayer = p2;
+            {
+                turnCounter *= -1;
 
-            activePlayer.performMove(ref board);
+                if (turnCounter == 1)
+                    activePlayer = p1;
+                else
+                    activePlayer = p2;
+
+                activePlayer.performMove(ref board);
+            }
         }
 
         public void PlayAI(ref Board b)
@@ -63,7 +75,8 @@ namespace Chess
 
         public void handleClick(Point grid, ref Board b, ref Graphics g)
         {
-            activePlayer.handleClick(grid, ref b, ref g);        
+            if(activePlayer != null)
+                activePlayer.handleClick(grid, ref b, ref g);             
         }      
     }
 }
