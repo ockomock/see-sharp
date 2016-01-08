@@ -243,11 +243,6 @@ namespace Chess
             if (p.X < 0 || p.Y < 0 || p.X > 7 || p.Y > 7)
                 return false;
 
-            if(p.X == 5 && p.Y == 6)
-            {
-                int asdasd = 1;
-            }
-
             // NOTE: TEMP
             setValidMoves(sb);
 
@@ -312,7 +307,6 @@ namespace Chess
                     {                     
                         resetValidMoves();
                         piece.setValidMoves(this);
-
 
                         // Pinning!
                         if (validMoves[pos.X, pos.Y])
