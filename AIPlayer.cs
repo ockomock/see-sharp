@@ -47,7 +47,8 @@ namespace Chess
                         p.X = i;
                         p.Y = j;
 
-                        if (b.getValidMove(bp, p))
+                    if (b.getValidMove(bp, p))
+
                             lp.Add(p);
                     }
             }
@@ -74,12 +75,11 @@ namespace Chess
             return kaka;
         }
 
-        public bool killMove(Point lp, List<BasePiece> lbp, List<Point> lpp, ref Board b)
+        public bool killMove(BasePiece bp, Point lp, List<Point> lpp, ref Board b)
         {
-            Console.WriteLine("SIZE OF LBP IN KILMOVE " + lbp.Count());
+            Console.WriteLine("SIZE OF LBP IN KILMOVE " + lpp.Count());
             for (int i = 0; i < lpp.Count(); i++)
             {
-                BasePiece bp = lbp.ElementAt(i);
                 Point np = lpp.ElementAt(i);
                 if (b.getPieceAt(np) != null && b.getPieceAt(np).getColor() != this.getColor())
                 {
@@ -97,10 +97,7 @@ namespace Chess
             Point lp = new Point();
             Point np = new Point();
             BasePiece bp = null;
-            List<BasePiece> lbp = new List<BasePiece>();
             List<Point> lpp = new List<Point>();
-            for (int i = 0; i < 10; i++)
-            {
                 do
                 {
                     bp = getPiece(b);
@@ -110,13 +107,8 @@ namespace Chess
                     np = getMove(b, bp);
                 } while (np.X == -1 || np.Y == -1);
 
-                b.setSelectedPiece(null);
-                b.resetValidMoves();
-                lbp.Add(bp);
-                lpp.Add(np);
-            }
 
-            if (killMove(lp, lbp, lpp, ref b))
+            if (killMove(bp, lp, lpp, ref b))
             {
                 b.setSelectedPiece(null);
                 b.resetValidMoves();
