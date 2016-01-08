@@ -44,14 +44,15 @@ namespace Chess
                 BasePiece sb = b.getSelectedPiece();
 
                 // Valid move! Move the piece to new position
-                if (b.getValidMove(sb, grid))
+               if (b.getValidMove(sb, grid)) // if(sb.validMove(b.getBasePiecePoint(sb), grid, b)) //
                 {
                     b.updatePiece(lastPoint, grid, ref sb);
 
                     // Test if the new position results in check
                     // Every piece needs to be looped and tested against the kings position
-                    
-                    if(b.isChecking(sb.getColor()))
+                    Color c = (sb.getColor() == Color.BLACK ? Color.WHITE : Color.BLACK);
+                    Point kingPos = b.getKingPos(c);
+                    if (b.isPinning(c, kingPos) != null)
                     {
                         Console.WriteLine("THAT MEANS CHECK!");
 

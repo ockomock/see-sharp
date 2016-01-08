@@ -18,6 +18,79 @@ namespace Chess
                 setImage("imgs/black_queen.bmp");
         }
 
+        public override bool validMove(Point from, Point to, Board board)
+        {
+            return rookValid(from, to, board) || bishopValid(from, to, board);
+        }
+
+        public bool bishopValid(Point from, Point to, Board board)
+        {
+            Point delta = new Point(to.X - from.X, to.Y - from.Y);
+            Point dir = new Point(0, 0);//
+
+            if (delta.X != 0)
+                dir.X = delta.X / Math.Abs(delta.X);
+
+            if (delta.Y != 0)
+                dir.Y = delta.Y / Math.Abs(delta.Y);
+
+            // left-right or up-down
+            if (Math.Abs(delta.X) == Math.Abs(delta.Y))
+            {
+                int max = Math.Abs(delta.X);
+                if (delta.X == 0)
+                    max = Math.Abs(delta.Y);
+
+                for (int i = 1; i < max; i++)
+                {
+                    if (board.getPieceAt(new Point(from.X + i * dir.X, from.Y + i * dir.Y)) != null)
+                        return false;
+                }
+            }
+            else
+                return false;
+
+            BasePiece piece = board.getPieceAt(to);
+            if (piece != null && piece.getColor() == getColor())
+                return false;
+
+            return true;
+        }
+
+        public bool rookValid(Point from, Point to, Board board)
+        {
+            Point delta = new Point(to.X - from.X, to.Y - from.Y);
+            Point dir = new Point(0, 0);//
+
+            if (delta.X != 0)
+                dir.X = delta.X / Math.Abs(delta.X);
+
+            if (delta.Y != 0)
+                dir.Y = delta.Y / Math.Abs(delta.Y);
+
+            // left-right or up-down
+            if ((delta.X != 0 && delta.Y == 0) || (delta.X == 0 && delta.Y != 0))
+            {
+                int max = Math.Abs(delta.X);
+                if (delta.X == 0)
+                    max = Math.Abs(delta.Y);
+
+                for (int i = 1; i < max; i++)
+                {
+                    if (board.getPieceAt(new Point(from.X + i * dir.X, from.Y + i * dir.Y)) != null)
+                        return false;
+                }
+            }
+            else
+                return false;
+
+            BasePiece piece = board.getPieceAt(to);
+            if (piece != null && piece.getColor() == getColor())
+                return false;
+
+            return true;
+        }
+
         public override void setValidMoves(Board board)
         {
             BasePiece selected = this;

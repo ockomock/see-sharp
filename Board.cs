@@ -75,6 +75,107 @@ namespace Chess
             }
         }
 
+        internal bool checkMate(Color color)
+        {
+            int numChecks = 0;
+            BasePiece checker = getNumCheckers(color, ref numChecks);
+
+            Console.WriteLine("Num checkers: " + numChecks);
+
+            if (numChecks == 0)
+                return false;
+
+            resetValidMoves();
+            Point kingPos = getKingPos(color);
+            setValidMoves(pieces[kingPos.X, kingPos.Y]);
+
+            // Test if the king can move
+            bool kingMove = false;
+            BasePiece king = pieces[kingPos.X, kingPos.Y];
+            if (getValidMove(king, new Point(kingPos.X + 1, kingPos.Y)) || getValidMove(king, new Point(kingPos.X - 1, kingPos.Y)) ||
+                getValidMove(king, new Point(kingPos.X, kingPos.Y + 1)) || getValidMove(king, new Point(kingPos.X, kingPos.Y - 1)) ||
+                getValidMove(king, new Point(kingPos.X - 1, kingPos.Y - 1)) || getValidMove(king, new Point(kingPos.X + 1, kingPos.Y + 1)) ||
+                getValidMove(king, new Point(kingPos.X + 1, kingPos.Y - 1)) || getValidMove(king, new Point(kingPos.X - 1, kingPos.Y + 1)))
+            {
+                kingMove = true;
+            }
+
+            // More than 1 checker and the king can't escape = check mate
+            if (numChecks >= 2 && !kingMove)
+                return true;
+
+            // Test if the checker can be captured
+            Color c = (color == Color.BLACK ? Color.WHITE : Color.BLACK);
+            BasePiece pinner = isPinning(c, getBasePiecePoint(checker));
+            if (kingMove)
+                return false;
+
+            if (pinner != null)
+            {
+                if(pinner.GetType() != typeof(King))
+                    return false;
+            }
+
+            // Test if the checking path can be intersected (impossible for knights)
+            if (checker.GetType() == typeof(Knight) || !canIntersect(color, checker))
+                return true;
+
+            return false;
+        }
+
+        private bool canIntersect(Color color, BasePiece checker)
+        {
+            Point kingPos = getKingPos(color);
+            Point checkerPos = getBasePiecePoint(checker);
+
+            Point delta = new Point(checkerPos.X - kingPos.X, checkerPos.Y - kingPos.Y);
+
+            if (Math.Abs(delta.X) + Math.Abs(delta.Y) <= 2 && Math.Abs(delta.X) <= 1 && Math.Abs(delta.Y) <= 1)
+            {
+                return false;
+            }
+
+            int max = 0;
+            // up - down
+            if (delta.X == 0 && delta.Y != 0)
+                max = Math.Abs(delta.Y);
+            else if(delta.X != 0 && delta.Y == 0)
+                max = Math.Abs(delta.X);
+            else if(delta.X != 0 && delta.X == delta.Y)
+                max = Math.Abs(delta.X); 
+
+            for (int i = 0; i < max; i++)
+            {
+                int xdir = (delta.X == 0 ? 0 : delta.X / Math.Abs(delta.X));
+                int ydir = (delta.Y == 0 ? 0 : delta.Y / Math.Abs(delta.Y));
+                if (isPinning(color, new Point(kingPos.X + i * xdir, kingPos.Y + i * ydir)) != null)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private BasePiece getNumCheckers(Color color, ref int numCheckers)
+        {
+            BasePiece checker = null;
+            Point kingPos = getKingPos(color);
+
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    BasePiece piece = pieces[x, y];
+                    if (piece != null && piece.getColor() != color && piece.validMove(getBasePiecePoint(piece), kingPos, this))
+                    {
+                        numCheckers++;
+                        checker = piece;
+                    }
+                }
+            }
+
+            return checker;
+        }
+
         internal void setValidMoves(BasePiece bp)
         {
             // Let the piece test allowed moves
@@ -132,20 +233,37 @@ namespace Chess
 
         public bool getValidMove(BasePiece sb, Point p)
         {
+            // OBS!!!! Pieces will dissapear if there is a capture and the move acctually is invalid!!!
+
+            if (p.X < 0 || p.Y < 0 || p.X > 7 || p.Y > 7)
+                return false;
+
+            if(p.X == 5 && p.Y == 6)
+            {
+                int asdasd = 1;
+            }
+
+            // NOTE: TEMP
+            setValidMoves(sb);
+
             bool valid = validMoves[p.X, p.Y];
 
             // Test if the move results in check
             if (valid)
             {
+                BasePiece backupPiece = pieces[p.X, p.Y];
+
                 // [[Temporarily]] move the piece!!
                 Point oldPoint = getBasePiecePoint(sb);
                 updatePiece(oldPoint, p, ref sb);
 
                 // Test opponents pieces
-                if (isChecking((sb.getColor() == Color.BLACK ? Color.WHITE : Color.BLACK)))
+                Point kingPos = getKingPos(sb.getColor());
+                if (isPinning(sb.getColor(), kingPos) != null)
                 {
                     // Move back the piece!
                     updatePiece(p, oldPoint, ref sb);
+                    pieces[p.X, p.Y] = backupPiece;
 
                     Console.WriteLine("Check! Invalid move!");
 
@@ -154,12 +272,13 @@ namespace Chess
 
                 // Move back the piece!
                 updatePiece(p, oldPoint, ref sb);
+                pieces[p.X, p.Y] = backupPiece;
             }
 
             return valid;
         }
 
-        private Point getKingPos(Color color)
+        public Point getKingPos(Color color)
         {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++)
@@ -175,30 +294,35 @@ namespace Chess
             return new Point(-1, -1);
         }
 
-        public bool isChecking(Color color)
+        public BasePiece isPinning(Color color, Point pos)
         {
-            Color c = (color == Color.BLACK ? Color.WHITE : Color.BLACK);
-            Point kingPos = getKingPos(c);
-
+            BasePiece pinner = null;
             // Test opponents pieces
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
                     BasePiece piece = pieces[i, j];
-                    if (piece != null && piece.getColor() != c)
-                    {
+                    if (piece != null && piece.getColor() != color)
+                    {                     
                         resetValidMoves();
                         piece.setValidMoves(this);
 
-                        // Check!
-                        if (validMoves[kingPos.X, kingPos.Y])
-                            return true;
+                        // Pinning!
+                        if (validMoves[pos.X, pos.Y])
+                        {
+                            // This is really stupid but all valid moves have to be reset since
+                            // this function is used even for the piece NOT moving to test for check
+                            resetValidMoves();
+                            pinner = piece;
+                            return pinner;
+                        }
                     }
                 }
             }
 
-            return false;
+            resetValidMoves();
+            return null;
         }
 
         public BasePiece getPieceAt(int x, int y)
