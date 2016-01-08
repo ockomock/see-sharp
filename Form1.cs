@@ -25,6 +25,7 @@ namespace Chess
         private Board board;
         private Graphics graphics;
         private Game game;
+        private int gameMode;
 
         public Form1()
         {
@@ -35,7 +36,6 @@ namespace Chess
 
             graphics = this.CreateGraphics();
             board = new Board();
-            game = new Game();
         }
 
         bool IsApplicationIdle()
@@ -95,6 +95,27 @@ namespace Chess
            
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (gameMode == 0)
+                gameMode = 1;
+            game = new Game(gameMode, ref board);
+            board.Draw(graphics);
+        }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            gameMode = 1;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            gameMode = 2;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            gameMode = 3;
+        }
     }
 }

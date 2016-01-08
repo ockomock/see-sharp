@@ -11,10 +11,42 @@ namespace Chess
     class Game
     {
         private Point lastPoint;
+        private Player p1, p2;
 
-        public Game()
+        public Game(int gameMode, ref Board b)
         {
             lastPoint = new Point(4, 4); // tmp solution 
+
+            System.Console.WriteLine(gameMode);
+
+            switch (gameMode)
+            {
+                case 1:
+                    p1 = new HumanPlayer(Color.WHITE);
+                    p2 = new AIPlayer(Color.BLACK);
+                    break;
+                case 2:
+                    p1 = new HumanPlayer(Color.WHITE);
+                    p2 = new HumanPlayer(Color.BLACK);
+                    break;
+                case 3:
+                    p1 = new AIPlayer(Color.WHITE);
+                    p2 = new AIPlayer(Color.BLACK);
+                    PlayAI(ref b);
+                    break;
+            }
+        }
+
+        public void PlayAI(ref Board b)
+        {
+            for (int i = 0; i < 9000; i++)
+            {
+                if (i % 2 == 0)
+                    p1.performMove(ref b);
+                else
+                    p2.performMove(ref b);
+            }
+
         }
 
         public void handleClick(Point grid, ref Board b, ref Graphics g)
@@ -38,6 +70,7 @@ namespace Chess
                 if (lastPoint == grid) // in case the user want to put down the selected piece and choose another
                 {
                     b.setSelectedPiece(null);
+                    b.resetValidMoves();
                     return;
                 }
 
@@ -66,6 +99,7 @@ namespace Chess
 
                 b.setSelectedPiece(null);
                 b.resetValidMoves();
+                p2.performMove(ref b);
                 return;
             }
 
