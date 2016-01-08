@@ -12,7 +12,7 @@ namespace Chess
     {
         private Color c;
 
-        public AIPlayer(Color color) : base(color)
+        public AIPlayer(Color color, Game g) : base(color, g)
         {
            
         }
