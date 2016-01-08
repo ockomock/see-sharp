@@ -63,7 +63,7 @@ namespace Chess
 
 
             game.handleClick(grid, ref board, ref graphics);
-            board.Draw(graphics); //update board, move this function call?
+           
         }
 
         public void UpdateGame()
@@ -73,7 +73,7 @@ namespace Chess
 
         public void DrawGame()
         {
-                     
+           // board.Draw(graphics); //update board, move this function call?
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -116,6 +116,11 @@ namespace Chess
         private void button4_Click(object sender, EventArgs e)
         {
             gameMode = 3;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            game.performActivePlayerMove(board, graphics);
         }
     }
 }

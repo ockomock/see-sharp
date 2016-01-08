@@ -308,7 +308,7 @@ namespace Chess
                     BasePiece piece = pieces[i, j];
                     if (piece != null && piece.getColor() != color)
                     {                     
-                        resetValidMoves();
+                       resetValidMoves();
                         piece.setValidMoves(this);
 
                         // Pinning!
@@ -316,7 +316,7 @@ namespace Chess
                         {
                             // This is really stupid but all valid moves have to be reset since
                             // this function is used even for the piece NOT moving to test for check
-                            resetValidMoves();
+                           // resetValidMoves();
                             pinner = piece;
                             return pinner;
                         }
