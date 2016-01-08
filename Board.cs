@@ -243,7 +243,7 @@ namespace Chess
                 return false;
 
             // NOTE: TEMP
-            setValidMoves(sb);
+            //setValidMoves(sb);
 
             bool valid = validMoves[p.X, p.Y];
 
