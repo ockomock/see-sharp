@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -330,7 +331,8 @@ namespace Chess
 
         public void saveToFile(String filename)
         {
-            int[] numbers = new int[7] { 41, 24, 16, 7, 10, 2, 17 };            
+            int[] numbers = new int[7] { 41, 24, 16, 7, 10, 2, 17 };
+            
         }
 
         public void loadFromFile(String filename)

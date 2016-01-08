@@ -33,7 +33,7 @@ namespace Chess
                 case 3:
                     p1 = new AIPlayer(Color.WHITE, this);
                     p2 = new AIPlayer(Color.BLACK, this);
-                    PlayAI(ref b);
+                   // PlayAI(ref b);
                     break;
             }
 
@@ -74,7 +74,17 @@ namespace Chess
         public void handleClick(Point grid, ref Board b, ref Graphics g)
         {
             if(activePlayer != null)
-                activePlayer.handleClick(grid, ref b, ref g);             
+                activePlayer.handleClick(grid, ref b, ref g);
+            b.Draw(g);            
         }      
+
+        public void performActivePlayerMove(Board b, Graphics g)
+        {
+            if (activePlayer != null)
+            {
+                activePlayer.performMove(ref b);
+                b.Draw(g);
+            }
+        }
     }
 }
