@@ -11,7 +11,8 @@ namespace Chess
     class Game
     {
         private Point lastPoint;
-        private Player p1, p2;
+        private Player p1, p2, activePlayer;
+        int turnCounter = 1;
 
         public Game(int gameMode, ref Board b)
         {
@@ -35,6 +36,18 @@ namespace Chess
                     PlayAI(ref b);
                     break;
             }
+
+            activePlayer = p1;
+        }
+
+        public void changeTurn()
+        {
+            turnCounter *= -1;
+
+            if (turnCounter == 1)
+                activePlayer = p1;
+            else
+                activePlayer = p2;
         }
 
         public void PlayAI(ref Board b)
@@ -98,12 +111,19 @@ namespace Chess
                             Console.WriteLine("Check mate! :)");
                         }
                     }
+                  
+                    p2.performMove(ref b);
+                    b.setSelectedPiece(null);
+                    b.resetValidMoves();
+
+                    if(p2.GetType() != typeof(AIPlayer))
+                        changeTurn();
+
+                    return;
                 }
 
                 b.setSelectedPiece(null);
                 b.resetValidMoves();
-                p2.performMove(ref b);
-                return;
             }
 
             /*
@@ -112,7 +132,7 @@ namespace Chess
              */
             bp = b.getPieceAt(grid);
             lastPoint = grid;
-            if (bp != null)
+            if (bp != null && bp.getColor() == activePlayer.getColor())
             {
                 b.setSelectedPiece(b.getPieceAt(grid));
                 Console.WriteLine("PIECE SELECTED"); // debug, remove later
