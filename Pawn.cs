@@ -33,6 +33,12 @@ namespace Chess
             // Only move one step in Y
             if(delta.X == 0 && delta.Y <= stepsAllowed && delta.Y > 0 && board.getPieceAt(to) == null)
             {
+                if(stepsAllowed == 2)
+                {
+                    if (board.getPieceAt(new Point(to.X, to.Y + delta.Y / 2)) != null)
+                        return false;
+                }
+
                 return true;
             }
 
