@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -308,8 +307,14 @@ namespace Chess
                 {
                     BasePiece piece = pieces[i, j];
                     if (piece != null && piece.getColor() != color)
-                    {                     
-                        resetValidMoves();
+                    {    
+                        if(piece.validMove(getBasePiecePoint(piece), pos, this))
+                        {
+                            pinner = piece;
+                            return pinner;
+                        }
+
+                      /*  resetValidMoves();
                         piece.setValidMoves(this);
 
                         // Pinning!
@@ -320,12 +325,12 @@ namespace Chess
                             resetValidMoves();
                             pinner = piece;
                             return pinner;
-                        }
+                        }*/
                     }
                 }
             }
 
-            resetValidMoves();
+           // resetValidMoves();
             return null;
         }
 
