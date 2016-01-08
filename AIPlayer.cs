@@ -66,8 +66,10 @@ namespace Chess
                 }
             }
 
-            // otherwise return a move
-            var kaka = lp.Last();
+            // otherwise return a random move
+            Random rnd = new Random();
+            int r = rnd.Next(0, lp.Count());
+            var kaka = lp.ElementAt(r);
             return kaka;
         }
 
@@ -121,6 +123,7 @@ namespace Chess
                 return 2;
             }
 
+            
             b.updatePiece(lp, np, ref bp);
             b.setSelectedPiece(null);
             b.resetValidMoves();
