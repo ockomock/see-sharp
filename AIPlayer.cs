@@ -46,7 +46,7 @@ namespace Chess
                     {
                         p.X = i;
                         p.Y = j;
-                        if (b.isValidMove(p))
+                        if (b.getValidMove(bp, p))
                             lp.Add(p);
                     }
             }
@@ -71,21 +71,43 @@ namespace Chess
             return kaka;
         }
 
+        public bool killMove(Point lp, List<BasePiece> lbp, List<Point> lpp, ref Board b)
+        {
+            int c = 0;
+            for (int i = 0; i < lpp.Count(); i++)
+            {
+                BasePiece bp = lbp.ElementAt(i);
+               
+                
+            }
+
+            return false;
+        }
+
        public override int performMove(ref Board b)
         {
             Point lp = new Point();
             Point np = new Point();
             BasePiece bp = null;
-            do
-            {
-                bp = getPiece(b);
-                lp = b.getBasePiecePoint(bp);
-                b.setSelectedPiece(bp);
-                b.setValidMoves(bp);
-                np = getMove(b, bp);
-            } while (np.X == -1 || np.Y == -1);
+         //   List<BasePiece> lbp = new List<BasePiece>();
+          //  List<Point> lpp = new List<Point>();
+          //  for (int i = 0; i < 5; i++)
+            //{
+                do
+                {
+                    bp = getPiece(b);
+                    lp = b.getBasePiecePoint(bp);
+                    b.setSelectedPiece(bp);
+                    b.setValidMoves(bp);
+                    np = getMove(b, bp);
+                } while (np.X == -1 || np.Y == -1);
 
+           //     lbp.Add(bp);
+             //   lpp.Add(np);
+            //}
 
+         //   if (killMove(lp, lbp, lpp, ref b))
+            //    return 2;
 
             b.updatePiece(lp, np, ref bp);
             b.setSelectedPiece(null);
