@@ -83,8 +83,8 @@ namespace Chess
             if (activePlayer != null)
             {
                 activePlayer.performMove(ref b);
-                b.Draw(g);
             }
+            b.Draw(g);
         }
     }
 }
