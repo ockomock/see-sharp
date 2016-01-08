@@ -328,6 +328,16 @@ namespace Chess
             return null;
         }
 
+        public void saveToFile(String filename)
+        {
+            int[] numbers = new int[7] { 41, 24, 16, 7, 10, 2, 17 };            
+        }
+
+        public void loadFromFile(String filename)
+        {
+
+        }
+
         public BasePiece getPieceAt(int x, int y)
         {
             return pieces[x,y];

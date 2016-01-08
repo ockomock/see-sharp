@@ -46,6 +46,9 @@ namespace Chess
                     {
                         p.X = i;
                         p.Y = j;
+                        // NOTE TEMP!
+                        b.setValidMoves(bp);
+
                         if (b.getValidMove(bp, p))
                             lp.Add(p);
                     }
