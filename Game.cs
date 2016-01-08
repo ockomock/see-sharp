@@ -56,8 +56,6 @@ namespace Chess
                     activePlayer = p1;
                 else
                     activePlayer = p2;
-
-               // activePlayer.performMove(ref board);
             }
         }
 
