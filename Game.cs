@@ -80,7 +80,7 @@ namespace Chess
                 BasePiece piece = b.getPieceAt(grid);
                 bool valid = b.getValidMove(sb, grid);
                 bool isKing = (piece != null && piece.GetType() == typeof(King));
-                if (valid && !isKing)  // if(sb.validMove(b.getBasePiecePoint(sb), grid, b)) //
+                if (b.getValidMove(sb, grid)) // valid && !isKing)  // if(sb.validMove(b.getBasePiecePoint(sb), grid, b)) //
                 {
                     b.updatePiece(lastPoint, grid, ref sb);
 

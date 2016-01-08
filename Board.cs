@@ -239,7 +239,6 @@ namespace Chess
         public bool getValidMove(BasePiece sb, Point p)
         {
             // OBS!!!! Pieces will dissapear if there is a capture and the move acctually is invalid!!!
-
             if (p.X < 0 || p.Y < 0 || p.X > 7 || p.Y > 7)
                 return false;
 
@@ -252,6 +251,10 @@ namespace Chess
             if (valid)
             {
                 BasePiece backupPiece = pieces[p.X, p.Y];
+
+                // Can't capture the king
+                if (backupPiece != null && backupPiece.GetType() == typeof(King))
+                    return false;
 
                 // [[Temporarily]] move the piece!!
                 Point oldPoint = getBasePiecePoint(sb);
