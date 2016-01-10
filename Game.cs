@@ -42,6 +42,9 @@ namespace Chess
 
         public void changeTurn(Board board)
         {
+            // Save game state to file
+            board.saveToFile("board.xml");
+
             // Is it checkmate?
             if (board.checkMate(activePlayer.getColor() == Color.BLACK ? Color.WHITE : Color.BLACK))
             {
