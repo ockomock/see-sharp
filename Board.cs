@@ -98,17 +98,13 @@ namespace Chess
 
         internal bool checkMate(Color color)
         {
-            int numChecks = 0;
-            BasePiece checker = getNumCheckers(color, ref numChecks);
-
-            if (numChecks == 0)
-                return false;
-
-            resetValidMoves();
+            // Test if the king can move
             Point kingPos = getKingPos(color);
+
+            // Reset king valid moves
+            resetValidMoves();
             setValidMoves(pieces[kingPos.X, kingPos.Y]);
 
-            // Test if the king can move
             bool kingMove = false;
             BasePiece king = pieces[kingPos.X, kingPos.Y];
             if (getValidMove(king, new Point(kingPos.X + 1, kingPos.Y)) || getValidMove(king, new Point(kingPos.X - 1, kingPos.Y)) ||
@@ -119,24 +115,31 @@ namespace Chess
                 kingMove = true;
             }
 
-            // Reset king valid moves
             resetValidMoves();
 
+            if (kingMove)
+                return false;
+
+            if (lastManStanding(king.getColor()) && !kingMove)
+                return true;
+
+            int numChecks = 0;
+            BasePiece checker = getNumCheckers(color, ref numChecks);
+
+            if (numChecks == 0)
+                return false;
+
             // More than 1 checker and the king can't escape = check mate
-            if ((numChecks >= 2 && !kingMove) || (lastManStanding(king.getColor()) && !kingMove))
+            if (numChecks >= 2 && !kingMove)
                 return true;
 
             // Test if the checker can be captured
             Color c = (color == Color.BLACK ? Color.WHITE : Color.BLACK);
             BasePiece pinner = isPinning(c, getBasePiecePoint(checker));
-            if (kingMove)
+           
+            // NOOOTE!!!!! Should not be needed/
+            if (pinner != null && pinner.GetType() != typeof(King))
                 return false;
-
-            if (pinner != null)
-            {
-                if(pinner.GetType() != typeof(King))
-                    return false;
-            }
 
             // Test if the checking path can be intersected (impossible for knights)
             if (checker.GetType() == typeof(Knight) || !canIntersect(color, checker))

@@ -26,8 +26,7 @@ namespace Chess
              * Check out of boundaries
              */
             if ((grid.X < 0 || grid.Y < 0) || (grid.X > 7 || grid.Y > 7))
-            {
-                Console.WriteLine("YOU FUCKED IN THE HEAD M8??? OUT OF BOUNDS"); // debug, remove later
+            {              
                 return;
             }
 
