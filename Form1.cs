@@ -62,9 +62,8 @@ namespace Chess
             Point cursor = PointToClient(Cursor.Position);
             Point grid = board.pixelToGrid(cursor);
 
-
-            game.handleClick(grid, ref board, ref graphics);
-
+            if(game != null)
+                game.handleClick(grid, ref board, ref graphics);
         }
 
         public void UpdateGame()
