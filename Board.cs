@@ -40,26 +40,31 @@ namespace Chess
             //loadFromFile("board.xml");
         }
 
-        public void Init()
+        public void clearBoard()
         {
             // Add the empty pieces
             for (int x = 0; x < 8; x++)
             {
-                for (int y = 2; y < 6; y++)
+                for (int y = 0; y < 8; y++)
                 {
                     pieces[x, y] = null;// new BasePiece(Color.WHITE); 
                 }
             }
+        }
+
+        public void Init()
+        {
+            clearBoard();
 
             // Add all black pieces
-            addPiece("Chess.Rook", "Black", 0, 0);
-            addPiece("Chess.Knight", "Black", 1, 0);
-            addPiece("Chess.Bishop", "Black", 2, 0);
-            addPiece("Chess.Queen", "Black", 3, 0);
-            addPiece("Chess.King", "Black", 4, 0);
-            addPiece("Chess.Bishop", "Black", 5, 0);
-            addPiece("Chess.Knight", "Black", 6, 0);
-            addPiece("Chess.Rook", "Black", 7, 0);
+            addPiece("Chess.Rook", Color.BLACK, 0, 0);
+            addPiece("Chess.Knight", Color.BLACK, 1, 0);
+            addPiece("Chess.Bishop", Color.BLACK, 2, 0);
+            addPiece("Chess.Queen", Color.BLACK, 3, 0);
+            addPiece("Chess.King", Color.BLACK, 4, 0);
+            addPiece("Chess.Bishop", Color.BLACK, 5, 0);
+            addPiece("Chess.Knight", Color.BLACK, 6, 0);
+            addPiece("Chess.Rook", Color.BLACK, 7, 0);
 
             /*pieces[0, 0] = new Rook(Color.BLACK);
             pieces[1, 0] = new Knight(Color.BLACK);
@@ -71,17 +76,17 @@ namespace Chess
             pieces[7, 0] = new Rook(Color.BLACK);*/
 
             for (int x = 0; x < 8; x++)
-                addPiece("Chess.Pawn", "Black", x, 1); // pieces[x, 1] = new Pawn(Color.BLACK);
+                addPiece("Chess.Pawn", Color.BLACK, x, 1); // pieces[x, 1] = new Pawn(Color.BLACK);
 
             // Add all white pieces
-            addPiece("Chess.Rook", "White", 0, 7);
-            addPiece("Chess.Knight", "White", 1, 7);
-            addPiece("Chess.Bishop", "White", 2, 7);
-            addPiece("Chess.Queen", "White", 3, 7);
-            addPiece("Chess.King", "White", 4, 7);
-            addPiece("Chess.Bishop", "White", 5, 7);
-            addPiece("Chess.Knight", "White", 6, 7);
-            addPiece("Chess.Rook", "White", 7, 7);
+            addPiece("Chess.Rook", Color.WHITE, 0, 7);
+            addPiece("Chess.Knight", Color.WHITE, 1, 7);
+            addPiece("Chess.Bishop", Color.WHITE, 2, 7);
+            addPiece("Chess.Queen", Color.WHITE, 3, 7);
+            addPiece("Chess.King", Color.WHITE, 4, 7);
+            addPiece("Chess.Bishop", Color.WHITE, 5, 7);
+            addPiece("Chess.Knight", Color.WHITE, 6, 7);
+            addPiece("Chess.Rook", Color.WHITE, 7, 7);
 
             /*pieces[0, 7] = new Rook(Color.WHITE);
             pieces[1, 7] = new Knight(Color.WHITE);
@@ -93,7 +98,7 @@ namespace Chess
             pieces[7, 7] = new Rook(Color.WHITE);*/
 
             for (int x = 0; x < 8; x++)
-                addPiece("Chess.Pawn", "White", x, 6); //pieces[x, 6] = new Pawn(Color.WHITE);  
+                addPiece("Chess.Pawn", Color.WHITE, x, 6); //pieces[x, 6] = new Pawn(Color.WHITE);  
         }
 
         public bool lastManStanding(Color c)
@@ -373,9 +378,16 @@ namespace Chess
             return null;
         }
 
-        public void saveToFile(String filename)
+        public void saveToFile(String filename, int mode, int turn)
         {
             int[] numbers = new int[7] { 41, 24, 16, 7, 10, 2, 17 };
+
+            XElement gameElement = new XElement("Game");
+
+            XElement modeElement = new XElement("Mode", mode);
+            XElement turnElement = new XElement("Turn", turn);
+            gameElement.Add(modeElement);
+            gameElement.Add(turnElement);
 
             XElement board = new XElement("Board");
 
@@ -396,12 +408,27 @@ namespace Chess
                 }
             }
 
-            board.Save(filename);
+            gameElement.Add(board);
+            gameElement.Save(filename);
         }
 
-        public void loadFromFile(String filename)
+        public int loadFromFile(String filename, ref int turn)
         {
+            // Set all pieces = null
+            clearBoard();
+
             XDocument xdoc = XDocument.Load(filename);
+
+            var a = xdoc.Descendants("Game").Select(s => new
+            {
+                Mode = s.Element("Mode"),
+                Turn = s.Element("Turn")
+            }).FirstOrDefault();
+
+            Console.WriteLine(a.Mode.Value + " " + a.Turn.Value);
+
+            int mode = Int32.Parse(a.Mode.Value);
+            turn = Int32.Parse(a.Turn.Value);
 
             // Query piece information from the XML file
             var lv1s = from lv1 in xdoc.Descendants("Piece")
@@ -416,36 +443,38 @@ namespace Chess
             // Loop over pieces and add them to pieces[x,y]
             foreach (var lv1 in lv1s)
             {
-                addPiece(lv1.Name, lv1.Color, Int32.Parse(lv1.Posx), Int32.Parse(lv1.Posy));
+                Color c = Color.WHITE;
+                if (lv1.Color == "BLACK")
+                    c = Color.BLACK;
+
+                addPiece(lv1.Name, c, Int32.Parse(lv1.Posx), Int32.Parse(lv1.Posy));
 
                 Console.WriteLine(lv1.Name + " " + lv1.Color + " " + lv1.Posx + " " + lv1.Posy);
             }
+
+            return mode;
         }
 
-        private void addPiece(string name, string color, int posx, int posy)
+        private void addPiece(string name, Color color, int posx, int posy)
         {
             // Invalid position
             if (posx < 0 || posy < 0 || posx > 7 || posy > 7) {
                 return;
             }
 
-            Color c = Color.WHITE;
-            if (color == "Black")
-                c = Color.BLACK;
-
             BasePiece piece = null;
             if (name == "Chess.Pawn")
-                piece = new Pawn(c);
+                piece = new Pawn(color);
             else if (name == "Chess.Rook")
-                piece = new Rook(c);
+                piece = new Rook(color);
             else if(name == "Chess.Knight")
-                piece = new Knight(c);
+                piece = new Knight(color);
             else if(name == "Chess.Bishop")
-                piece = new Bishop(c);
+                piece = new Bishop(color);
             else if(name == "Chess.Queen")
-                piece = new Queen(c);
+                piece = new Queen(color);
             else if(name == "Chess.King")
-                piece = new King(c);         
+                piece = new King(color);         
 
             if(piece != null)
             {

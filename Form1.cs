@@ -131,7 +131,8 @@ namespace Chess
                 gameMode = 1;
 
             game = new Game(gameMode, ref board);
-            game.loadFromFile("board.xml");
+            int turn = 0;
+            int mode = board.loadFromFile("board.xml",ref turn);
             board.Draw(graphics);
             disableButtons();
         }
