@@ -12,13 +12,14 @@ namespace Chess
     {
         private Player p1, p2, activePlayer;
         int mode;
-        int turnCounter = 1;
+        int turnCounter;
 
-        public Game(int gameMode, ref Board b)
+        public Game(int gameMode, ref Board b, int turn = 1)
         {
             System.Console.WriteLine(gameMode);
 
             mode = gameMode;
+            turnCounter = turn;
 
             switch (gameMode)
             {
@@ -37,14 +38,14 @@ namespace Chess
                     break;
             }
 
-            activePlayer = p1;
+            if (turnCounter == 1)
+                activePlayer = p1;
+            else if (turnCounter == -1)
+                activePlayer = p2;
         }
 
         public void changeTurn(Board board)
         {
-            // Save game state to file
-            board.saveToFile("board.xml", mode, turnCounter);
-
             // Is it checkmate?
             if (board.checkMate(activePlayer.getColor() == Color.BLACK ? Color.WHITE : Color.BLACK))
             {
@@ -60,6 +61,9 @@ namespace Chess
                 else
                     activePlayer = p2;
             }
+
+            // Save game state to file
+            board.saveToFile("board.xml", mode, turnCounter);
         }
 
         public void PlayAI(ref Board b)

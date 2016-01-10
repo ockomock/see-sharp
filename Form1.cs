@@ -127,12 +127,10 @@ namespace Chess
 
         private void button6_Click(object sender, EventArgs e)
         {
-            if (gameMode == 0)
-                gameMode = 1;
-
-            game = new Game(gameMode, ref board);
             int turn = 0;
-            int mode = board.loadFromFile("board.xml",ref turn);
+            int mode = board.loadFromFile("board.xml", ref turn);
+            game = new Game(mode, ref board, turn);
+            
             board.Draw(graphics);
             disableButtons();
         }
