@@ -166,11 +166,13 @@ namespace Chess
             else if(delta.X != 0 && Math.Abs(delta.X) == Math.Abs(delta.Y))
                 max = Math.Abs(delta.X); 
 
-            for (int i = 0; i < max; i++)
+            for (int i = 1; i < max; i++)
             {
                 int xdir = (delta.X == 0 ? 0 : delta.X / Math.Abs(delta.X));
                 int ydir = (delta.Y == 0 ? 0 : delta.Y / Math.Abs(delta.Y));
-                if (isPinning(color, new Point(kingPos.X + i * xdir, kingPos.Y + i * ydir)) != null)
+                Color c = (color == Color.BLACK ? Color.WHITE : Color.BLACK);
+                BasePiece pinner = isPinning(c, new Point(kingPos.X + i * xdir, kingPos.Y + i * ydir));
+                if (pinner != null && pinner.GetType() != typeof(King))
                     return true;
             }
 

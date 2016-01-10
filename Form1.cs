@@ -137,9 +137,9 @@ namespace Chess
         private void button6_Click(object sender, EventArgs e)
         {
             int turn = 0;
+            board = new Board();
             int mode = board.loadFromFile("board.xml", ref turn);
             game = new Game(mode, ref board, turn);
-            board = new Board();
             board.Draw(graphics);
             disableButtons();
         }
