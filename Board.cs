@@ -101,8 +101,6 @@ namespace Chess
             int numChecks = 0;
             BasePiece checker = getNumCheckers(color, ref numChecks);
 
-            Console.WriteLine("Num checkers: " + numChecks);
-
             if (numChecks == 0)
                 return false;
 
