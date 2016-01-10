@@ -97,11 +97,15 @@ namespace Chess
             List<Point> lpp = new List<Point>();
                 do
                 {
-                    bp = getPiece(b);
+                b.resetValidMoves();
+                b.setSelectedPiece(null);
+                bp = getPiece(b);
                     lp = b.getBasePiecePoint(bp);
                     b.setSelectedPiece(bp);
                     b.setValidMoves(bp);
                     np = getMove(b, bp);
+
+
                 } while (np.X == -1 || np.Y == -1);
 
 
