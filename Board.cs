@@ -144,6 +144,9 @@ namespace Chess
                 kingMove = true;
             }
 
+            // Reset king valid moves
+            resetValidMoves();
+
             // More than 1 checker and the king can't escape = check mate
             if ((numChecks >= 2 && !kingMove) || (lastManStanding(king.getColor()) && !kingMove))
                 return true;
@@ -185,7 +188,7 @@ namespace Chess
                 max = Math.Abs(delta.Y);
             else if(delta.X != 0 && delta.Y == 0)
                 max = Math.Abs(delta.X);
-            else if(delta.X != 0 && delta.X == delta.Y)
+            else if(delta.X != 0 && Math.Abs(delta.X) == Math.Abs(delta.Y))
                 max = Math.Abs(delta.X); 
 
             for (int i = 0; i < max; i++)
