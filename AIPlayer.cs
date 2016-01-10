@@ -54,7 +54,6 @@ namespace Chess
             }
             
 
-            Console.WriteLine("SIZE OF THE LIST OF POINTS " + lp.Count());
             if (lp.Count() == 0)
                 return new Point(-1, -1);
 
@@ -63,7 +62,6 @@ namespace Chess
             {
                 if (b.getPieceAt(np) != null && b.getPieceAt(np).getColor() != this.getColor())
                 {
-                    Console.WriteLine("HASIDHAISDHAISDHAIH");
                     return np;
                 }
             }
@@ -77,7 +75,6 @@ namespace Chess
 
         public bool killMove(BasePiece bp, Point lp, List<Point> lpp, ref Board b)
         {
-            Console.WriteLine("SIZE OF LBP IN KILMOVE " + lpp.Count());
             for (int i = 0; i < lpp.Count(); i++)
             {
                 Point np = lpp.ElementAt(i);

@@ -53,21 +53,6 @@ namespace Chess
                 {
                     b.updatePiece(lastPoint, grid, ref sb);
 
-                    // Test if the new position results in check
-                    // Every piece needs to be looped and tested against the kings position
-                    Color c = (sb.getColor() == Color.BLACK ? Color.WHITE : Color.BLACK);
-                    Point kingPos = b.getKingPos(c);
-                    if (b.isPinning(c, kingPos) != null)
-                    {
-                        Console.WriteLine("THAT MEANS CHECK!");
-
-                        // Is it checkmate?
-                        if (b.checkMate((sb.getColor() == Color.BLACK ? Color.WHITE : Color.BLACK)))
-                        {
-                            Console.WriteLine("Check mate! :)");
-                        }
-                    }
-
                     //p2.performMove(ref b);
                     b.setSelectedPiece(null);
                     b.resetValidMoves();
@@ -89,16 +74,12 @@ namespace Chess
             if (bp != null && bp.getColor() == getColor())
             {
                 b.setSelectedPiece(b.getPieceAt(grid));
-                Console.WriteLine("PIECE SELECTED"); // debug, remove later
-
                 b.setValidMoves(bp);
             }
             else
             {
 
             }
-
-            Console.WriteLine("THIS FUCKING SHIT x: " + grid.X + "y: " + grid.Y); // debug, remove later
         }
     }
 }

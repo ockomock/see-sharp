@@ -35,7 +35,7 @@ namespace Chess
             Application.Idle += HandleApplicationIdle;
 
             graphics = this.CreateGraphics();
-            board = new Board();
+           board = new Board();
 
         }
 
@@ -100,6 +100,7 @@ namespace Chess
         {
             if (gameMode == 0)
                 gameMode = 1;
+            board = new Board();
             game = new Game(gameMode, ref board);
             board.Draw(graphics);
             disableButtons();
@@ -107,17 +108,26 @@ namespace Chess
 
         private void button2_Click(object sender, EventArgs e)
         {
-            gameMode = 1;
+            board = new Board();
+            game = new Game(1, ref board);
+            board.Draw(graphics);
+            disableButtons();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            gameMode = 2;
+            board = new Board();
+            game = new Game(2, ref board);
+            board.Draw(graphics);
+            disableButtons();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            gameMode = 3;
+            board = new Board();
+            game = new Game(3, ref board);
+            board.Draw(graphics);
+            disableButtons();
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -130,7 +140,7 @@ namespace Chess
             int turn = 0;
             int mode = board.loadFromFile("board.xml", ref turn);
             game = new Game(mode, ref board, turn);
-            
+            board = new Board();
             board.Draw(graphics);
             disableButtons();
         }
@@ -138,10 +148,22 @@ namespace Chess
         private void disableButtons()
         {
             button6.Enabled = false;
-            button1.Enabled = false;
             button2.Enabled = false;
             button3.Enabled = false;
             button4.Enabled = false;
+        }
+
+        private void enableButtons()
+        {
+            button6.Enabled = true;
+            button2.Enabled = true;
+            button3.Enabled = true;
+            button4.Enabled = true;
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            enableButtons();
         }
     }
 }
