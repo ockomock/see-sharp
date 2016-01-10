@@ -101,6 +101,24 @@ namespace Chess
                 addPiece("Chess.Pawn", Color.WHITE, x, 6); //pieces[x, 6] = new Pawn(Color.WHITE);  
         }
 
+        public bool lastManStanding(Color c)
+        {
+            int count = 0;
+            Point p = new Point();
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    p.X = i;
+                    p.Y = j;
+                    if (getPieceAt(p) != null && getPieceAt(p).getColor() == c)
+                        count++;
+                }
+            }
+
+            return count == 1;
+        }
+
         internal bool checkMate(Color color)
         {
             int numChecks = 0;
@@ -127,7 +145,7 @@ namespace Chess
             }
 
             // More than 1 checker and the king can't escape = check mate
-            if (numChecks >= 2 && !kingMove)
+            if ((numChecks >= 2 && !kingMove) || (lastManStanding(king.getColor()) && !kingMove))
                 return true;
 
             // Test if the checker can be captured
