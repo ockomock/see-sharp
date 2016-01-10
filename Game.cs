@@ -43,7 +43,7 @@ namespace Chess
         public void changeTurn(Board board)
         {
             // Save game state to file
-            board.saveToFile("board.xml");
+            board.saveToFile("board.xml", mode, turnCounter);
 
             // Is it checkmate?
             if (board.checkMate(activePlayer.getColor() == Color.BLACK ? Color.WHITE : Color.BLACK))
@@ -88,6 +88,6 @@ namespace Chess
                 activePlayer.performMove(ref b);
             }
             b.Draw(g);
-        }
+        }       
     }
 }
