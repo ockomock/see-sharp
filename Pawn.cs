@@ -22,8 +22,10 @@ namespace Chess
         {
             Point delta = new Point(to.X - from.X, to.Y - from.Y);
 
-            if (getColor() == Color.WHITE)
-                delta.Y *= -1;
+            if (getColor() == Color.WHITE && delta.Y > 0)
+                return false;
+            else if (getColor() == Color.BLACK && delta.Y < 0)
+                return false;
 
             // Allow 2 steps for the first move
             int stepsAllowed = 1;
@@ -31,7 +33,7 @@ namespace Chess
                 stepsAllowed = 2;
 
             // Only move one step in Y
-            if(delta.X == 0 && delta.Y <= stepsAllowed && delta.Y > 0 && board.getPieceAt(to) == null)
+            if(delta.X == 0 && Math.Abs(delta.Y) <= stepsAllowed && Math.Abs(delta.Y) > 0 && board.getPieceAt(to) == null)
             {
                 if(stepsAllowed == 2)
                 {
@@ -43,7 +45,7 @@ namespace Chess
             }
 
             // Diagonal
-            if ((delta.X == 1 || delta.X == -1) && delta.Y == 1 && board.getPieceAt(to) != null && board.getPieceAt(to).getColor() != getColor())
+            if ((delta.X == 1 || delta.X == -1) && Math.Abs(delta.Y) == 1 && board.getPieceAt(to) != null && board.getPieceAt(to).getColor() != getColor())
                 return true;
 
             return false;
