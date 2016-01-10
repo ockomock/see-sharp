@@ -5,19 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Chess
 {
     class Game
     {
         private Player p1, p2, activePlayer;
+        Board board;
         int mode;
         int turnCounter;
 
         public Game(int gameMode, ref Board b, int turn = 1)
         {
-            System.Console.WriteLine(gameMode);
+            //createFileWatcher();
 
+            board = b;
             mode = gameMode;
             turnCounter = turn;
 
@@ -86,12 +89,40 @@ namespace Chess
         }      
 
         public void performActivePlayerMove(Board b, Graphics g)
-        {
+        {       
             if (activePlayer != null)
             {
                 activePlayer.performMove(ref b);
             }
             b.Draw(g);
-        }       
+        }      
+        
+        public void createFileWatcher()
+        {
+            // Create a new FileSystemWatcher and set its properties.
+            FileSystemWatcher watcher = new FileSystemWatcher();
+            watcher.Path = ".";
+            /* Watch for changes in LastAccess and LastWrite times, and 
+               the renaming of files or directories. */
+            watcher.NotifyFilter = NotifyFilters.LastWrite;              
+            // Only watch text files.
+            watcher.Filter = "*.xml";
+
+            // Add event handlers.
+            watcher.Changed += new FileSystemEventHandler(OnChanged);
+
+            // Begin watching.
+            watcher.EnableRaisingEvents = true;
+        }
+
+        // Define the event handlers.
+        private void OnChanged(object source, FileSystemEventArgs e)
+        {
+            // Specify what is done when a file is changed, created, or deleted.
+            Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
+
+            int c = 0;
+            board.loadFromFile("board.xml", ref c);
+        }
     }
 }
