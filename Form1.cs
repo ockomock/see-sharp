@@ -36,6 +36,7 @@ namespace Chess
 
             graphics = this.CreateGraphics();
             board = new Board();
+
         }
 
         bool IsApplicationIdle()
@@ -63,17 +64,17 @@ namespace Chess
 
 
             game.handleClick(grid, ref board, ref graphics);
-           
+
         }
 
         public void UpdateGame()
         {
-                    
+
         }
 
         public void DrawGame()
         {
-           // board.Draw(graphics); //update board, move this function call?
+            // board.Draw(graphics); //update board, move this function call?
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -92,7 +93,7 @@ namespace Chess
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -101,6 +102,7 @@ namespace Chess
                 gameMode = 1;
             game = new Game(gameMode, ref board);
             board.Draw(graphics);
+            disableButtons();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -121,6 +123,26 @@ namespace Chess
         private void button5_Click(object sender, EventArgs e)
         {
             game.performActivePlayerMove(board, graphics);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (gameMode == 0)
+                gameMode = 1;
+
+            game = new Game(gameMode, ref board);
+            game.loadFromFile("board.xml");
+            board.Draw(graphics);
+            disableButtons();
+        }
+
+        private void disableButtons()
+        {
+            button6.Enabled = false;
+            button1.Enabled = false;
+            button2.Enabled = false;
+            button3.Enabled = false;
+            button4.Enabled = false;
         }
     }
 }
