@@ -14,8 +14,6 @@ namespace Chess
 
     public class Board
     {
-       // private List<BasePiece> pieces;
-
         private BasePiece [,]  pieces;
         private BasePiece selectedPiece;
         private Image black, white, selectedpiece;
@@ -26,8 +24,7 @@ namespace Chess
         public Board()
         {
             // Init the board 
-
-            selectedPiece = null;// new BasePiece();
+            selectedPiece = null;
             pieces = new BasePiece[8, 8];
             validMoves = new bool[8, 8];
             black = Bitmap.FromFile("imgs/black.bmp");
@@ -36,8 +33,6 @@ namespace Chess
             gridSize = 64;
 
             Init();
-
-            //loadFromFile("board.xml");
         }
 
         public void clearBoard()
@@ -66,15 +61,6 @@ namespace Chess
             addPiece("Chess.Knight", Color.BLACK, 6, 0);
             addPiece("Chess.Rook", Color.BLACK, 7, 0);
 
-            /*pieces[0, 0] = new Rook(Color.BLACK);
-            pieces[1, 0] = new Knight(Color.BLACK);
-            pieces[2, 0] = new Bishop(Color.BLACK);
-            pieces[3, 0] = new Queen(Color.BLACK);
-            pieces[4, 0] = new King(Color.BLACK);
-            pieces[5, 0] = new Bishop(Color.BLACK);
-            pieces[6, 0] = new Knight(Color.BLACK);
-            pieces[7, 0] = new Rook(Color.BLACK);*/
-
             for (int x = 0; x < 8; x++)
                 addPiece("Chess.Pawn", Color.BLACK, x, 1); // pieces[x, 1] = new Pawn(Color.BLACK);
 
@@ -87,15 +73,6 @@ namespace Chess
             addPiece("Chess.Bishop", Color.WHITE, 5, 7);
             addPiece("Chess.Knight", Color.WHITE, 6, 7);
             addPiece("Chess.Rook", Color.WHITE, 7, 7);
-
-            /*pieces[0, 7] = new Rook(Color.WHITE);
-            pieces[1, 7] = new Knight(Color.WHITE);
-            pieces[2, 7] = new Bishop(Color.WHITE);
-            pieces[3, 7] = new Queen(Color.WHITE);
-            pieces[4, 7] = new King(Color.WHITE);
-            pieces[5, 7] = new Bishop(Color.WHITE);
-            pieces[6, 7] = new Knight(Color.WHITE);
-            pieces[7, 7] = new Rook(Color.WHITE);*/
 
             for (int x = 0; x < 8; x++)
                 addPiece("Chess.Pawn", Color.WHITE, x, 6); //pieces[x, 6] = new Pawn(Color.WHITE);  
@@ -289,9 +266,6 @@ namespace Chess
             if (p.X < 0 || p.Y < 0 || p.X > 7 || p.Y > 7)
                 return false;
 
-            // NOTE: TEMP
-            //setValidMoves(sb);
-
             bool valid = validMoves[p.X, p.Y];
 
             // Test if the move results in check
@@ -359,20 +333,7 @@ namespace Chess
                         {
                             pinner = piece;
                             return pinner;
-                        }
-
-                      /*  resetValidMoves();
-                        piece.setValidMoves(this);
-
-                        // Pinning!
-                        if (validMoves[pos.X, pos.Y])
-                        {
-                            // This is really stupid but all valid moves have to be reset since
-                            // this function is used even for the piece NOT moving to test for check
-                            resetValidMoves();
-                            pinner = piece;
-                            return pinner;
-                        }*/
+                        }                    
                     }
                 }
             }

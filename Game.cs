@@ -36,8 +36,7 @@ namespace Chess
                     break;
                 case 3:
                     p1 = new AIPlayer(Color.WHITE, this);
-                    p2 = new AIPlayer(Color.BLACK, this);
-                   // PlayAI(ref b);
+                    p2 = new AIPlayer(Color.BLACK, this);                   
                     break;
             }
 

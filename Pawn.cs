@@ -35,7 +35,7 @@ namespace Chess
             {
                 if(stepsAllowed == 2)
                 {
-                    if (board.getPieceAt(new Point(to.X, to.Y + delta.Y / 2)) != null)
+                    if (board.getPieceAt(new Point(to.X, to.Y - delta.Y / 2)) != null)
                         return false;
                 }
 
