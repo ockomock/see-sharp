@@ -48,22 +48,29 @@ namespace Chess
 
         public void changeTurn(Board board)
         {
-            // Is it checkmate?
-            if (board.checkMate(activePlayer.getColor() == Color.BLACK ? Color.WHITE : Color.BLACK))
+           
+            if (board.validKings())
             {
-                Console.WriteLine("Check mate! :)");
-                activePlayer = null;
+                // Is it checkmate?
+                if (board.checkMate(activePlayer.getColor() == Color.BLACK ? Color.WHITE : Color.BLACK))
+                {
+                    Console.WriteLine("Check mate! :)");
+                    activePlayer = null;
+                }
+                else
+                {
+                    turnCounter *= -1;
+
+                    if (turnCounter == 1)
+                        activePlayer = p1;
+                    else
+                        activePlayer = p2;
+                }
             }
             else
             {
-                turnCounter *= -1;
-
-                if (turnCounter == 1)
-                    activePlayer = p1;
-                else
-                    activePlayer = p2;
+                activePlayer = null;
             }
-
             // Save game state to file
             board.saveToFile("board.xml", mode, turnCounter);
         }
@@ -85,7 +92,7 @@ namespace Chess
             if (activePlayer != null)
             {
                 activePlayer.handleClick(grid, ref b, ref g);
-                if (mode == 1)
+                if (mode == 1 && activePlayer != null)
                     activePlayer.performMove(ref b);
             }
             b.Draw(g);            

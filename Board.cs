@@ -55,7 +55,7 @@ namespace Chess
             addPiece("Chess.Rook", Color.BLACK, 0, 0);
             addPiece("Chess.Knight", Color.BLACK, 1, 0);
             addPiece("Chess.Bishop", Color.BLACK, 2, 0);
-            addPiece("Chess.Queen", Color.BLACK, 3, 0);
+            addPiece("Chess.King", Color.BLACK, 3, 0);
             addPiece("Chess.King", Color.BLACK, 4, 0);
             addPiece("Chess.Bishop", Color.BLACK, 5, 0);
             addPiece("Chess.Knight", Color.BLACK, 6, 0);
@@ -94,6 +94,29 @@ namespace Chess
             }
 
             return count == 1;
+        }
+
+        public bool validKings()
+        {
+            int wk = 0, bk = 0;
+            Point p = new Point();
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    p.X = i;
+                    p.Y = j;
+                    if (getPieceAt(p) == null || getPieceAt(p).GetType() != typeof(King))
+                        continue;
+
+                    if (getPieceAt(p).getColor() == Color.WHITE)
+                        wk++;
+                    else if (getPieceAt(p).getColor() == Color.BLACK)
+                        bk++;
+                }   
+            }
+
+            return wk == 1 && bk == 1;
         }
 
         internal bool checkMate(Color color)
