@@ -83,8 +83,12 @@ namespace Chess
 
         public void handleClick(Point grid, ref Board b, ref Graphics g)
         {
-            if(activePlayer != null)
+            if (activePlayer != null)
+            {
                 activePlayer.handleClick(grid, ref b, ref g);
+                if (mode == 1)
+                    activePlayer.performMove(ref b);
+            }
             b.Draw(g);            
         }      
 
