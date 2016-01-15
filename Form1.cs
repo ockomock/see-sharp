@@ -54,7 +54,6 @@ namespace Chess
             }
         }
 
-
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);

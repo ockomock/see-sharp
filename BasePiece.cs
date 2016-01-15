@@ -10,28 +10,16 @@ namespace Chess
 {
     public class BasePiece
     {
-        private Image image;
         private Color color;
 
         public BasePiece(Color c)
         {
-            image = null;
             color = c;
         }
 
         public virtual bool validMove(Point from, Point to, Board board) { return false; }
 
-        public virtual void setValidMoves(Board board) { }
-
-        public Image getImage()
-        {
-            return image;
-        }
-
-        public void setImage(String source)
-        {
-            image = Bitmap.FromFile(source);
-        }
+        public virtual void setValidMoves(Board board) { }      
 
         public Color getColor()
         {

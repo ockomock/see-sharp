@@ -12,10 +12,7 @@ namespace Chess
     {
         public Rook(Color color) : base(color)
         {
-            if (color == Color.WHITE)
-                setImage("imgs/white_rook.png");
-            else
-                setImage("imgs/black_rook.bmp");
+           
         }
 
         public override bool validMove(Point from, Point to, Board board)
