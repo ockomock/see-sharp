@@ -12,10 +12,7 @@ namespace Chess
     {
         public Bishop(Color color) : base(color)
         {
-            if (color == Color.WHITE)
-                setImage("imgs/white_bishop.bmp");
-            else
-                setImage("imgs/black_bishop.bmp");
+            
         }
 
         public override bool validMove(Point from, Point to, Board board)

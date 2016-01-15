@@ -12,10 +12,7 @@ namespace Chess
     {
         public King(Color color) : base(color)
         {
-            if (color == Color.WHITE)
-                setImage("imgs/white_king.bmp");
-            else
-                setImage("imgs/black_king.bmp");
+
         }
 
         public override bool validMove(Point from, Point to, Board board)

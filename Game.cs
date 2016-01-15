@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 namespace Chess
 {
@@ -18,7 +19,7 @@ namespace Chess
 
         public Game(int gameMode, ref Board b, int turn = 1)
         {
-            //createFileWatcher();
+            createFileWatcher();
 
             board = b;
             mode = gameMode;
@@ -121,6 +122,7 @@ namespace Chess
             Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
 
             int c = 0;
+            Thread.Sleep(50); // Needed to not start loading when reading to the file!!!
             board.loadFromFile("board.xml", ref c);
         }
     }
