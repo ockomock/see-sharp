@@ -16,6 +16,7 @@ namespace Chess
         Board board;
         int mode;
         int turnCounter;
+        FileSystemWatcher watcher;
 
         public Game(int gameMode, ref Board b, int turn = 1)
         {
@@ -73,7 +74,9 @@ namespace Chess
                 activePlayer = null;
             }
             // Save game state to file
+            stopWatcher();
             board.saveToFile("board.xml", mode, turnCounter);
+            startWatcher();
         }
 
         public void PlayAI(ref Board b)
@@ -111,7 +114,7 @@ namespace Chess
         public void createFileWatcher()
         {
             // Create a new FileSystemWatcher and set its properties.
-            FileSystemWatcher watcher = new FileSystemWatcher();
+            watcher = new FileSystemWatcher();
             watcher.Path = ".";
             /* Watch for changes in LastAccess and LastWrite times, and 
                the renaming of files or directories. */
@@ -126,6 +129,16 @@ namespace Chess
             watcher.EnableRaisingEvents = true;
         }
 
+        public void startWatcher()
+        {
+            watcher.EnableRaisingEvents = true;
+        }
+
+        public void stopWatcher()
+        {
+            watcher.EnableRaisingEvents = false;
+        }
+
         // Define the event handlers.
         private void OnChanged(object source, FileSystemEventArgs e)
         {
@@ -133,7 +146,7 @@ namespace Chess
             Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
 
             int c = 0;
-            Thread.Sleep(50); // Needed to not start loading when reading to the file!!!
+            Thread.Sleep(1000); // Needed to not start loading when reading to the file!!!
             board.loadFromFile("board.xml", ref c);
         }
     }
