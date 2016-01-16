@@ -21,8 +21,9 @@ using System.Windows.Forms;
 namespace Chess
 {
     public partial class Form1 : Form
-    {
+    {        
         private Board board;
+        private BoardUI boardUI;
         private Graphics graphics;
         private Game game;
         private int gameMode;
@@ -35,8 +36,8 @@ namespace Chess
             Application.Idle += HandleApplicationIdle;
 
             graphics = this.CreateGraphics();
-           board = new Board();
-
+            board = new Board();
+            boardUI = new BoardUI();         
         }
 
         bool IsApplicationIdle()
@@ -61,8 +62,11 @@ namespace Chess
             Point cursor = PointToClient(Cursor.Position);
             Point grid = board.pixelToGrid(cursor);
 
-            if(game != null)
+            if (game != null)
+            {
                 game.handleClick(grid, ref board, ref graphics);
+                DrawBoardUI();
+            }
         }
 
         public void UpdateGame()
@@ -73,6 +77,11 @@ namespace Chess
         public void DrawGame()
         {
             // board.Draw(graphics); //update board, move this function call?
+        }
+
+        public void DrawBoardUI()
+        {
+            boardUI.Draw(graphics, board.getPieces(), board.getValidMoves(), board.getSelectedPiece(), board.getGridSize());
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -100,7 +109,7 @@ namespace Chess
                 gameMode = 1;
             board = new Board();
             game = new Game(gameMode, ref board);
-            board.Draw(graphics);
+            DrawBoardUI();
             disableButtons();
         }
 
@@ -108,7 +117,7 @@ namespace Chess
         {
             board = new Board();
             game = new Game(1, ref board);
-            board.Draw(graphics);
+            DrawBoardUI();
             disableButtons();
         }
 
@@ -116,7 +125,7 @@ namespace Chess
         {
             board = new Board();
             game = new Game(2, ref board);
-            board.Draw(graphics);
+            DrawBoardUI();
             disableButtons();
         }
 
@@ -124,13 +133,14 @@ namespace Chess
         {
             board = new Board();
             game = new Game(3, ref board);
-            board.Draw(graphics);
+            DrawBoardUI();
             disableButtons();
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             game.performActivePlayerMove(board, graphics);
+            DrawBoardUI();
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -139,7 +149,7 @@ namespace Chess
             board = new Board();
             int mode = board.loadFromFile("board.xml", ref turn);
             game = new Game(mode, ref board, turn);
-            board.Draw(graphics);
+            DrawBoardUI();
             disableButtons();
         }
 

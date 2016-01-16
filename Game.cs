@@ -88,8 +88,7 @@ namespace Chess
                 activePlayer.handleClick(grid, ref b, ref g);
                 if (mode == 1 && activePlayer != null)
                     activePlayer.performMove(ref b);
-            }
-            b.Draw(g);            
+            }                        
         }      
 
         public void performActivePlayerMove(Board b, Graphics g)
@@ -98,7 +97,6 @@ namespace Chess
             {
                 activePlayer.performMove(ref b);
             }
-            b.Draw(g);
         }      
         
         public void createFileWatcher()
@@ -121,7 +119,7 @@ namespace Chess
 
         public void startWatcher()
         {
-            file = new System.IO.FileInfo(".");
+            file = new System.IO.FileInfo("board.xml");
             watcher.EnableRaisingEvents = true;
         }
 
