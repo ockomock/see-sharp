@@ -16,11 +16,13 @@ namespace Chess
         Board board;
         int mode;
         int turnCounter;
-        FileSystemWatcher watcher;
+        private FileSystemWatcher watcher;
+        private System.IO.FileInfo file;
 
         public Game(int gameMode, ref Board b, int turn = 1)
         {
             createFileWatcher();
+            file = new System.IO.FileInfo("board.xml");
 
             board = b;
             mode = gameMode;
@@ -79,18 +81,6 @@ namespace Chess
             startWatcher();
         }
 
-        public void PlayAI(ref Board b)
-        {
-            for (int i = 0; i < 9000; i++)
-            {
-                if (i % 2 == 0)
-                    p1.performMove(ref b);
-                else
-                    p2.performMove(ref b);
-            }
-
-        }
-
         public void handleClick(Point grid, ref Board b, ref Graphics g)
         {
             if (activePlayer != null)
@@ -131,6 +121,7 @@ namespace Chess
 
         public void startWatcher()
         {
+            file = new System.IO.FileInfo(".");
             watcher.EnableRaisingEvents = true;
         }
 
@@ -142,12 +133,19 @@ namespace Chess
         // Define the event handlers.
         private void OnChanged(object source, FileSystemEventArgs e)
         {
-            // Specify what is done when a file is changed, created, or deleted.
-            Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
+            System.IO.FileInfo tmp = new System.IO.FileInfo("board.xml");
 
-            int c = 0;
-            Thread.Sleep(1000); // Needed to not start loading when reading to the file!!!
-            board.loadFromFile("board.xml", ref c);
+            // This will make sure the file only gets loaded when the saving is done
+            if (tmp.LastWriteTime != file.LastWriteTime)
+            {
+                // Specify what is done when a file is changed, created, or deleted.
+                Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
+
+                int c = 0;
+                //Thread.Sleep(1000); // Needed to not start loading when reading to the file!!!
+                board.loadFromFile("board.xml", ref c);
+                file = new System.IO.FileInfo(".");
+            }
         }
     }
 }
