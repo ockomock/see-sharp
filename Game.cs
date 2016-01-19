@@ -17,12 +17,12 @@ namespace Chess
         int mode;
         int turnCounter;
         private FileSystemWatcher watcher;
-        private System.IO.FileInfo file;
+        private DateTime lastWrite;
 
         public Game(int gameMode, ref Board b, int turn = 1)
         {
             createFileWatcher();
-            file = new System.IO.FileInfo("board.xml");
+            lastWrite = new System.IO.FileInfo("board.xml").LastWriteTime;
 
             board = b;
             mode = gameMode;
@@ -77,7 +77,9 @@ namespace Chess
             }
             // Save game state to file
             stopWatcher();
+            lastWrite = DateTime.MaxValue;
             board.saveToFile("board.xml", mode, turnCounter);
+            lastWrite = (new System.IO.FileInfo("board.xml")).LastWriteTime;
             startWatcher();
         }
 
@@ -119,7 +121,7 @@ namespace Chess
 
         public void startWatcher()
         {
-            file = new System.IO.FileInfo("board.xml");
+            lastWrite = (new System.IO.FileInfo("board.xml")).LastWriteTime;
             watcher.EnableRaisingEvents = true;
         }
 
@@ -134,15 +136,14 @@ namespace Chess
             System.IO.FileInfo tmp = new System.IO.FileInfo("board.xml");
 
             // This will make sure the file only gets loaded when the saving is done
-            if (tmp.LastWriteTime != file.LastWriteTime)
+            if (lastWrite < tmp.LastWriteTime)
             {
                 // Specify what is done when a file is changed, created, or deleted.
                 Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
 
                 int c = 0;
-                //Thread.Sleep(1000); // Needed to not start loading when reading to the file!!!
                 board.loadFromFile("board.xml", ref c);
-                file = new System.IO.FileInfo(".");
+                lastWrite = (new System.IO.FileInfo("board.xml")).LastWriteTime;
             }
         }
     }

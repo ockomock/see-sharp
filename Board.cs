@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.IO;
 using System.Drawing;
+using System.Threading;
 
 namespace Chess
 {
@@ -342,79 +343,99 @@ namespace Chess
 
         public void saveToFile(String filename, int mode, int turn)
         {
-            int[] numbers = new int[7] { 41, 24, 16, 7, 10, 2, 17 };
-
-            XElement gameElement = new XElement("Game");
-
-            XElement modeElement = new XElement("Mode", mode);
-            XElement turnElement = new XElement("Turn", turn);
-            gameElement.Add(modeElement);
-            gameElement.Add(turnElement);
-
-            XElement board = new XElement("Board");
-
-            // Loop over pieces
-            for (int x = 0; x < 8; x++)
+            try
             {
-                for (int y = 0; y < 8; y++)
+
+
+                int[] numbers = new int[7] { 41, 24, 16, 7, 10, 2, 17 };
+
+                XElement gameElement = new XElement("Game");
+
+                XElement modeElement = new XElement("Mode", mode);
+                XElement turnElement = new XElement("Turn", turn);
+                gameElement.Add(modeElement);
+                gameElement.Add(turnElement);
+
+                XElement board = new XElement("Board");
+
+                // Loop over pieces
+                for (int x = 0; x < 8; x++)
                 {
-                    if(pieces[x,y] != null)
+                    for (int y = 0; y < 8; y++)
                     {
-                        XElement piece = new XElement("Piece");
-                        piece.Add(new XAttribute("Name", pieces[x,y].GetType()));
-                        piece.Add(new XAttribute("Color", pieces[x,y].getColor()));
-                        piece.Add(new XAttribute("Posx", x));
-                        piece.Add(new XAttribute("Posy", y));
-                        board.Add(piece);
+                        if (pieces[x, y] != null)
+                        {
+                            XElement piece = new XElement("Piece");
+                            piece.Add(new XAttribute("Name", pieces[x, y].GetType()));
+                            piece.Add(new XAttribute("Color", pieces[x, y].getColor()));
+                            piece.Add(new XAttribute("Posx", x));
+                            piece.Add(new XAttribute("Posy", y));
+                            board.Add(piece);
+                        }
                     }
                 }
-            }
 
-            gameElement.Add(board);
-            gameElement.Save(filename);         
+                gameElement.Add(board);
+                gameElement.Save(filename);
+            }
+            catch (IOException)
+            {
+               Thread.Sleep(100);
+               saveToFile(filename, mode, turn);
+            }
         }
 
         public int loadFromFile(String filename, ref int turn)
         {
-            // Set all pieces = null
-            clearBoard();
-
-            XDocument xdoc = XDocument.Load(filename);
-
-            var a = xdoc.Descendants("Game").Select(s => new
+            try
             {
-                Mode = s.Element("Mode"),
-                Turn = s.Element("Turn")
-            }).FirstOrDefault();
+                // Set all pieces = null
+                clearBoard();
 
-            Console.WriteLine(a.Mode.Value + " " + a.Turn.Value);
+                FileStream file = File.Open(filename, FileMode.Open, FileAccess.Read);
+                XDocument xdoc = XDocument.Load(file);
 
-            int mode = Int32.Parse(a.Mode.Value);
-            turn = Int32.Parse(a.Turn.Value);
+                var a = xdoc.Descendants("Game").Select(s => new
+                {
+                    Mode = s.Element("Mode"),
+                    Turn = s.Element("Turn")
+                }).FirstOrDefault();
 
-            // Query piece information from the XML file
-            var lv1s = from lv1 in xdoc.Descendants("Piece")
-                       select new
-                       {
-                           Name = lv1.Attribute("Name").Value,
-                           Color = lv1.Attribute("Color").Value,
-                           Posx = lv1.Attribute("Posx").Value,
-                           Posy = lv1.Attribute("Posy").Value
-                       };
+                Console.WriteLine(a.Mode.Value + " " + a.Turn.Value);
 
-            // Loop over pieces and add them to pieces[x,y]
-            foreach (var lv1 in lv1s)
-            {
-                Color c = Color.WHITE;
-                if (lv1.Color == "BLACK")
-                    c = Color.BLACK;
+                int mode = Int32.Parse(a.Mode.Value);
+                turn = Int32.Parse(a.Turn.Value);
 
-                addPiece(lv1.Name, c, Int32.Parse(lv1.Posx), Int32.Parse(lv1.Posy));
+                // Query piece information from the XML file
+                var lv1s = from lv1 in xdoc.Descendants("Piece")
+                           select new
+                           {
+                               Name = lv1.Attribute("Name").Value,
+                               Color = lv1.Attribute("Color").Value,
+                               Posx = lv1.Attribute("Posx").Value,
+                               Posy = lv1.Attribute("Posy").Value
+                           };
 
-                Console.WriteLine(lv1.Name + " " + lv1.Color + " " + lv1.Posx + " " + lv1.Posy);
+                // Loop over pieces and add them to pieces[x,y]
+                foreach (var lv1 in lv1s)
+                {
+                    Color c = Color.WHITE;
+                    if (lv1.Color == "BLACK")
+                        c = Color.BLACK;
+
+                    addPiece(lv1.Name, c, Int32.Parse(lv1.Posx), Int32.Parse(lv1.Posy));
+
+                    Console.WriteLine(lv1.Name + " " + lv1.Color + " " + lv1.Posx + " " + lv1.Posy);
+                }
+
+                file.Close();
+                return mode;
             }
-
-            return mode;
+            catch (IOException)
+            {
+                Thread.Sleep(100);
+                return loadFromFile(filename, ref turn);                
+            }
         }
 
         private void addPiece(string name, Color color, int posx, int posy)
